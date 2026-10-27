@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101828">
+  <title>Data Quality Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">DQ</div>
+      <div>
+        <p class="eyebrow">DATA INTELLIGENCE</p>
+        <h1>Data Quality Dashboard</h1>
+        <p class="subtitle">Monitor, analyze, and improve your datasets.</p>
+      </div>
+    </div>
+    <div class="connection"><span class="status-dot"></span><span id="api-status">Checking API…</span></div>
+  </header>
+
+  <main>
+    <section class="metrics" aria-label="Dataset summary">
+      <article class="metric-card"><div class="metric-label">Total datasets</div><div class="metric-value" id="total-datasets">—</div><div class="metric-note">Saved analyses</div></article>
+      <article class="metric-card"><div class="metric-label">Average quality score</div><div class="metric-value" id="average-score">—</div><div class="metric-note">Across loaded datasets</div></article>
+      <article class="metric-card"><div class="metric-label">Rows analyzed</div><div class="metric-value" id="total-rows">—</div><div class="metric-note">Across loaded datasets</div></article>
+    </section>
+
+    <section class="panel upload-panel">
+      <div>
+        <p class="eyebrow accent">NEW ANALYSIS</p>
+        <h2>Upload a CSV file</h2>
+        <p class="muted">Choose a CSV file up to 5 MB. Your existing API will analyze and save the report.</p>
+      </div>
+      <form id="upload-form">
+        <label class="file-picker" for="csv-file"><span class="file-icon">↑</span><span id="file-label">Choose a .csv file</span></label>
+        <input id="csv-file" type="file" accept=".csv,text/csv" required>
+        <button id="upload-button" type="submit">Upload and analyze <span aria-hidden="true">→</span></button>
+      </form>
+      <p id="message" class="message" role="status" aria-live="polite"></p>
+    </section>
+
+    <section class="panel">
+      <div class="section-heading">
+        <div><p class="eyebrow accent">YOUR DATA</p><h2>Dataset history</h2></div>
+        <button id="refresh-button" class="button-secondary" type="button">↻ Refresh</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Dataset</th><th>Rows</th><th>Columns</th><th>Quality score</th><th>Uploaded</th><th>Report</th></tr></thead>
+          <tbody id="dataset-list"><tr><td colspan="6" class="empty">Loading datasets…</td></tr></tbody>
+        </table>
+      </div>
+      <p class="table-footnote" id="history-note">Showing the latest 50 datasets.</p>
+    </section>
+
+    <section class="panel report-panel" id="report-panel" hidden>
+      <div class="section-heading"><div><p class="eyebrow accent">ANALYSIS DETAILS</p><h2 id="report-title">Quality report</h2></div><button id="close-report" class="button-secondary" type="button">Close</button></div>
+      <div id="report-summary" class="report-summary"></div>
+      <div class="table-wrap">
+        <table><thead><tr><th>Column</th><th>Type</th><th>Missing</th><th>Unique</th><th>Outliers</th></tr></thead><tbody id="column-details"></tbody></table>
+      </div>
+      <h3 class="subheading">Detected issues</h3>
+      <ul id="issues-list" class="issues-list"></ul>
+      <details><summary>View complete JSON report</summary><pre id="report-content"></pre></details>
+    </section>
+    <footer>Data Quality API · Local dashboard</footer>
+  </main>
+  <script src="{{ url_for('static', filename='js/dashboard.js') }}" defer></script>
+</body>
+</html>
